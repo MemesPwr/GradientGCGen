@@ -1,5 +1,5 @@
 # Gradient GI Generator
-You can do shit like you can see below
+You can do shit like you can see below  
 ![example](doc_res/example.png)
 
 # Building and running
