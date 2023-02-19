@@ -3,13 +3,49 @@ using System.Text.RegularExpressions;
 
 internal class Program
 {
+    private static readonly string CurrentBinaryName = Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".exe";
+    
     public static void Main(string[] args)
     {
-        var text = GetInput("Put your text to apply linear gradient on", x => !string.IsNullOrEmpty(x));
+        string? text, colorA, colorB;
+        if (args.Length == 1 && (args.ElementAt(0).Equals("/?", StringComparison.OrdinalIgnoreCase) || args.ElementAt(0).Equals("-halp", StringComparison.OrdinalIgnoreCase)))
+        {
+            Console.WriteLine($"{CurrentBinaryName} <color A> <color B> <your text>");
+            return;
+        }
+        if (args.Length >= 3)
+        {
+            colorA = args.ElementAt(0);
+            colorB = args.ElementAt(1);
+
+            if (!IsHexColorRight(colorA))
+            {
+                Console.WriteLine($"\"{colorA}\" - is not looks like HEX color...");
+                return;
+            }
+
+            if (!IsHexColorRight(colorB))
+            {
+                Console.WriteLine($"\"{colorB}\" - is not looks like HEX color...");
+                return;
+            }
+
+            text = string.Join(' ', args.Skip(2)).Trim();
+            if (string.IsNullOrEmpty(text))
+            {
+                Console.WriteLine("What a hell... Text to color is empty!");
+                return;
+            }
+
+            Generate(colorA, colorB, text);
+            return;
+        }
+
+        text = GetInput("Put your text to apply linear gradient on", x => !string.IsNullOrEmpty(x));
         if (string.IsNullOrEmpty(text))
             text = "Fuck you!";
 
-        var colorA = GetInput("Put a HEX of a color A", IsHexColorRight);
+        colorA = GetInput("Put a HEX of a color A", IsHexColorRight);
         if (string.IsNullOrEmpty(colorA))
             colorA = "EBACCA";
 
@@ -19,7 +55,7 @@ internal class Program
             return;
         }
 
-        var colorB = GetInput("Put a HEX of a color B", IsHexColorRight);
+        colorB = GetInput("Put a HEX of a color B", IsHexColorRight);
         if (string.IsNullOrEmpty(colorB))
             colorB = "FFAB00";
 
@@ -29,6 +65,11 @@ internal class Program
             return;
         }
 
+        Generate(colorA, colorB, text);
+    }
+
+    private static void Generate(string colorA, string colorB, string text)
+    {
         var gradientStart = ParseColorFromHex(colorA);
         var gradientStop = ParseColorFromHex(colorB);
         Console.WriteLine(string.Join(string.Empty, GetGradients(gradientStart, gradientStop, text.Length).Select((col, idx) => GetPrintChar(text[idx], col))));
