@@ -6,3 +6,7 @@ You can do shit like you can see below
 - Install .NET 7+ SDK is not yet installed
 - Open console/terminal or what are you using
 - `dotnet run` or run it directly from your IDE
+
+
+### You can also use
+- [gradientIt](https://gradient-it.vercel.app/) by [Wansn-w](https://github.com/Wansn-w) | [gradientIt repo](https://github.com/Wansn-w/gradientIt)
